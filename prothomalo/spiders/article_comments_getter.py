@@ -1,6 +1,8 @@
 import scrapy
 from selenium import webdriver
 import time
+
+from selenium.webdriver import FirefoxProfile
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
@@ -13,7 +15,12 @@ class ArticleCommentsSpider(scrapy.Spider):
     start_urls = []
 
     def __init__(self, link):
+        # firefoxProfile = FirefoxProfile()
+        # firefoxProfile.add_extension('/home/insane/.mozilla/firefox/manjaro.default/extensions')
+        # self.driver = webdriver.Firefox(firefoxProfile)
+
         self.driver = webdriver.Firefox()
+
         ArticleCommentsSpider.start_urls = [
             link
         ]
