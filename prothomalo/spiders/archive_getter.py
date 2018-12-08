@@ -18,8 +18,8 @@ class ProthomSpider(scrapy.Spider):
         self.driver = webdriver.Firefox()
 
     def parse(self, response):
-        for div in response.xpath("//div[@class='listing']/div"):
-            yield {
+        for div in response.xpath("//div[@class='listing']/div"):   # Xpath language
+            yield {   # dictionary
                 'title-index': div.xpath(".//h2/span/text()").extract_first(),
                 'link-index': div.xpath("./a/@href").extract_first()
             }
@@ -35,32 +35,19 @@ class ProthomSpider(scrapy.Spider):
         delay = 5 # seconds
         comment = None
 
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        # comment = self.driver.find_element_by_css_selector("//div[@class='comment_portion']//p")
         try:
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(5)
-            # comment = self.driver.find_element_by_css_selector("//div[@class='comment_portion']//p")
-            try:
-                comment = self.driver.find_element_by_css_selector("div.comment_portion").text
-            except NoSuchElementException:
-                comment = None
-            print()
-            print()
-            print()
-            print()
-            print()
-            print(comment)
-            print()
-            print()
-            print()
-            print()
-            print()
-            # comment = self.driver.find_element_by_xpath("//div[@class='comment_portion']//p/text()")
-            # comment = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, "//div[@id='comments']//p")))
-        except TimeoutException:
-            pass
+            comment = self.driver.find_elements_by_css_selector("ul.comments_holder_ul>li p")
+        except NoSuchElementException:
+            comment = None
+        comments = [ c.text for c in comment ]
+        # comment = self.driver.find_element_by_xpath("//div[@class='comment_portion']//p/text()")
+        # comment = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, "//div[@id='comments']//p")))
 
         yield {
             'title-page': response.xpath("//h1/text()").extract_first(),
             'content': response.xpath("//article/div//p/text()").extract(),
-            'comment': comment
+            'comment': comments
         }
