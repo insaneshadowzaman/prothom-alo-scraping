@@ -4,3 +4,9 @@
 \.vscode/
 
 geckodriver\.log
+
+results\.json
+
+prothomalo/spiders/__pycache__/
+
+__pycache__/
