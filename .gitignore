@@ -10,3 +10,5 @@ results\.json
 prothomalo/spiders/__pycache__/
 
 __pycache__/
+
+prothom\.json
