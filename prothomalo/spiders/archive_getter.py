@@ -35,18 +35,18 @@ class ProthomSpider(scrapy.Spider):
         delay = 5 # seconds
         comment = None
 
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);") #javascript execute in browser
+        time.sleep(2) #sleep
         # comment = self.driver.find_element_by_css_selector("//div[@class='comment_portion']//p")
         try:
-            comment = self.driver.find_elements_by_css_selector("ul.comments_holder_ul>li p")
+            comment = self.driver.find_elements_by_css_selector("ul.comments_holder_ul>li p")  # css selector to get array
         except NoSuchElementException:
-            comment = None
-        comments = [ c.text for c in comment ]
+            comment = None # if no comments
+        comments = [ c.text for c in comment ] # get only text from the gathered comments
         # comment = self.driver.find_element_by_xpath("//div[@class='comment_portion']//p/text()")
         # comment = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, "//div[@id='comments']//p")))
 
-        yield {
+        yield { # return dictionary that scrapy will convert to json and write in output file.
             'title-page': response.xpath("//h1/text()").extract_first(),
             'content': response.xpath("//article/div//p/text()").extract(),
             'comment': comments
